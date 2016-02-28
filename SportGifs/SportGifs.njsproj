@@ -30,6 +30,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="app\models\GifModel.js" />
     <Compile Include="public\js\app.js" />
     <Compile Include="server.js" />
     <Compile Include="app\routes\index.js" />
@@ -41,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
+    <Folder Include="app\models\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="app\routes\" />
