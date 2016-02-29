@@ -7,7 +7,7 @@ var GifSchema = Schema({
 	permalink: {type: String, required: true},
 	subreddit: { type: String, required: true },
 	created_at: {type: Date, default: Date.now}
-});
+}); 
 
 // set created_at before saving it to db
 GifSchema.pre('save', function (next) {

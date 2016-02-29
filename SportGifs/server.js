@@ -1,9 +1,7 @@
 ﻿var express = require('express');
 var port = process.env.PORT || 3000;
-var mongoos = require('mongoose');
+var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-var routes = require('./routes');
-var user = require('./routes/user');
 var app = express();
 
 /*
@@ -17,7 +15,7 @@ app.use(bodyParser.json());
 /*
  * ROUTES 
  */
-
+require('./app/routes/routes')(app);
 
 /*
  * LISTEN 
