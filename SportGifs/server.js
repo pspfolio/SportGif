@@ -23,6 +23,7 @@ app.use(function (req, res, next) {
  */
 require('./app/routes/routes')(app);
 
+require('./app/cron/cronTimer')();
 /*
  * LISTEN 
  */
