@@ -8,6 +8,7 @@
     "email": ""
   },
   "dependencies": {
+    "async": "^1.5.2",
     "body-parser": "^1.15.0",
     "cron": "^1.1.0",
     "express": "3.4.4",

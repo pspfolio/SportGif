@@ -21,7 +21,6 @@ var routes = function (app) {
 	 */
 
 	app.post('/api/gifs', function (req, res) {
-		console.log('post');
 		var gif = new GifModel(req.body);
 		console.log(gif);
 		gif.save(function (err) {

@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var GifModel = require('../models/GifModel');
 var CronJob = require('cron').CronJob;
+var async = require('async');
 
 var cronJob = function () {
 	/*new CronJob('* * * * * *', function () {
@@ -14,10 +15,17 @@ var cronJob = function () {
 		var gifs = redditPosts.data.children.filter(function (item) {
 			return item.data.url.indexOf('streamable') > -1
 		});
-		
+
 		var result = gifs.map(function (item) {
-			return {}
-		})
+			return {
+				title: item.data.title,
+				url: item.data.url,
+				permalink: item.data.permalink,
+				subreddit: item.data.subreddit
+			}
+		});
+
+		saveDataToDb(result);
 	}
 	
 	function getDataFromReddit(channel, callback) {
@@ -39,7 +47,26 @@ var cronJob = function () {
 		});
 	}
 
-
+	function saveDataToDb(data) {
+		var gifCollections = [];
+		console.log(data.length);
+		async.each(data, function (item, callback) {
+			var gif = new GifModel(item);
+			var query = GifModel.find({ url : gif.url });
+			query.exec(function (err, item) {
+				if (item.length > 0) {
+					console.log('item found');
+					callback();
+				} else {
+					gifCollections.push(item);
+					callback();
+				}
+			});
+		}, function (err) {
+			console.log('done');
+			console.log(gifCollections.length);
+		});
+	}
 }
 
 module.exports = cronJob;
