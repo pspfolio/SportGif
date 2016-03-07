@@ -31,7 +31,7 @@ var cronJob = function () {
 	function getDataFromReddit(channel, callback) {
 		var options = {
 			host: 'www.reddit.com',
-			path: '/r/' + channel +'.json',
+			path: '/r/' + channel + '/.json?limit=100'
 		}
 
 		http.get(options, function (resp) {
