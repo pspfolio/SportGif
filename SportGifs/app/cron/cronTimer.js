@@ -25,7 +25,7 @@ var cronJob = function () {
 			}
 		});
 
-		saveDataToDb(result);
+		var gifsToAdd = getListOfGifsToAddDb(result, addDataToDb);
 	}
 	
 	function getDataFromReddit(channel, callback) {
@@ -47,8 +47,8 @@ var cronJob = function () {
 		});
 	}
 
-	function saveDataToDb(data) {
-		var gifCollections = [];
+	function getListOfGifsToAddDb(data, cb) {
+		var gifCollection = [];
 		console.log(data.length);
 		async.each(data, function (item, callback) {
 			var gif = new GifModel(item);
@@ -58,13 +58,24 @@ var cronJob = function () {
 					console.log('item found');
 					callback();
 				} else {
-					gifCollections.push(item);
+					gifCollection.push(gif);
 					callback();
 				}
 			});
 		}, function (err) {
 			console.log('done');
-			console.log(gifCollections.length);
+			console.log(gifCollection.length);
+			cb(gifCollection)
+		});
+	}
+
+	function addDataToDb(gifs) {
+		async.each(gifs, function (gif, callback) {
+			gif.save(function (err) {
+				if (err) console.log('error saving the data to database');
+
+				console.log(gif.Title + ' saved to the db');
+			});
 		});
 	}
 }
