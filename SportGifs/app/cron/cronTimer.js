@@ -1,7 +1,7 @@
-﻿var http = require('http');
-var mongoose = require('mongoose');
+﻿var mongoose = require('mongoose');
 var GifModel = require('../models/GifModel');
 var CronJob = require('cron').CronJob;
+var getData = require('../services/getData');
 var async = require('async');
 
 var cronJob = function () {
@@ -9,30 +9,45 @@ var cronJob = function () {
 		console.log('You will see this message every second');
 	}, null, true, 'America/Los_Angeles');*/
 
-	var test = getDataFromReddit('nba', initData);
+	var subreddits = ['nba'];
+	for (var i = 0; i < subreddits.length; i++) {
+		console.log(getData);
+		var t = getData(subreddits[i], initData);
+	}
+	
+	var gifModel = {
+		title: '',
+		url: '',
+		permalink: '',
+		subreddit: ''
+	};
 	
 	function initData(redditPosts) {
-		var gifs = redditPosts.data.children.filter(function (item) {
+		console.log('whuup', redditPosts);
+		var streamable = redditPosts.data.children.filter(function (item) {
 			return item.data.url.indexOf('streamable') > -1
 		});
-
-		var result = gifs.map(function (item) {
-			return {
-				title: item.data.title,
-				url: item.data.url,
-				permalink: item.data.permalink,
-				subreddit: item.data.subreddit
-			}
+		
+		var gifs = streamable.map(function (item) {
+			return createGif(item);
 		});
+		
 
-		var gifsToAdd = getListOfGifsToAddDb(result, addDataToDb);
+		getListOfGifsToAddDb(gifs, addDataToDb)
+	}
+	
+	function createGif(item) {
+		var gif = Object.create(gifModel);
+		gif.title = item.data.title,
+		gif.url = item.data.url,
+		gif.permalink = item.data.permalink,
+		gif.subreddit = item.data.subreddit
+
+		return gif;
 	}
 	
 	function getDataFromReddit(channel, callback) {
-		var options = {
-			host: 'www.reddit.com',
-			path: '/r/' + channel + '/.json?limit=100'
-		}
+
 
 		http.get(options, function (resp) {
 			var body = '';
@@ -46,7 +61,7 @@ var cronJob = function () {
 			});
 		});
 	}
-
+	
 	function getListOfGifsToAddDb(data, cb) {
 		var gifCollection = [];
 		console.log(data.length);
@@ -55,7 +70,6 @@ var cronJob = function () {
 			var query = GifModel.find({ url : gif.url });
 			query.exec(function (err, item) {
 				if (item.length > 0) {
-					console.log('item found');
 					callback();
 				} else {
 					gifCollection.push(gif);
