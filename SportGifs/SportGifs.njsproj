@@ -33,7 +33,7 @@
     <Compile Include="app\cron\cronTimer.js" />
     <Compile Include="app\models\GifModel.js" />
     <Compile Include="app\routes\routes.js" />
-    <Compile Include="app\services\getData.js" />
+    <Compile Include="app\services\httpHelper.js" />
     <Compile Include="server.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
