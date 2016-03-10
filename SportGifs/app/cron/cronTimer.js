@@ -5,18 +5,17 @@ var httpHelper = require('../services/httpHelper');
 var async = require('async');
 
 var cronJob = function () {
-	/*new CronJob('* * * * * *', function () {
-		console.log('You will see this message every second');
-	}, null, true, 'America/Los_Angeles');*/
 	var options = {
 		host: 'www.reddit.com',
 		path: '/r/nba/.json?limit=100'
 	}
-	
-	var subreddits = ['nba'];
-	for (var i = 0; i < subreddits.length; i++) {
-		httpHelper.getData(options, initData);
-	}
+
+	new CronJob('59 * * * * *', function () {
+		var subreddits = ['nba'];
+		for (var i = 0; i < subreddits.length; i++) {
+			httpHelper.getData(options, initData);
+		}
+	}, null, true, 'America/Los_Angeles');
 
 	function initData(redditPosts) {
 		// find streamable gifs from posts
