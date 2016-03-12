@@ -8,7 +8,7 @@ var routes = function (app) {
 	 */
 
 	app.get('/api/gifs', function (req, res) {
-		var query = GifModel.find({});
+		var query = GifModel.find({}).sort({created_at: -1});
 		query.exec(function (err, gifs) {
 			if (err) res.send(err);
 			
