@@ -5,14 +5,15 @@ var httpHelper = require('../services/httpHelper');
 var async = require('async');
 
 var cronJob = function () {
-	var options = {
-		host: 'www.reddit.com',
-		path: '/r/nba/.json?limit=100'
-	}
+	
 
 	new CronJob('59 * * * * *', function () {
-		var subreddits = ['nba'];
+		var subreddits = ['nba', 'soccer'];
 		for (var i = 0; i < subreddits.length; i++) {
+			var options = {
+				host: 'www.reddit.com',
+				path: '/r/' + subreddits[i] + '/.json?limit=100'
+			}
 			httpHelper.getData(options, initData);
 		}
 	}, null, true, 'America/Los_Angeles');

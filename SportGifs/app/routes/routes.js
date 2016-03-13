@@ -7,8 +7,9 @@ var routes = function (app) {
 	 * GET ROUTES
 	 */
 
-	app.get('/api/gifs', function (req, res) {
-		var query = GifModel.find({}).sort({created_at: -1});
+	app.get('/api/gifs/:subCategory', function (req, res) {
+		var category = req.params.subCategory;
+		var query = GifModel.find({subreddit: category}).sort({created_at: -1});
 		query.exec(function (err, gifs) {
 			if (err) res.send(err);
 			
