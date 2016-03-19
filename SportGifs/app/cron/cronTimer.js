@@ -8,7 +8,8 @@ var cronJob = function () {
 	
 
 	new CronJob('59 * * * * *', function () {
-		var subreddits = ['nba', 'soccer'];
+		//var subreddits = ['nba', 'soccer'];
+		var subreddits = ['nba', 'soccer','globaloffensive', 'rocketleague'];
 		for (var i = 0; i < subreddits.length; i++) {
 			var options = {
 				host: 'www.reddit.com',
@@ -19,19 +20,32 @@ var cronJob = function () {
 	}, null, true, 'America/Los_Angeles');
 
 	function initData(redditPosts) {
+		console.log('initdata');
 		// find streamable gifs from posts
-		var streamable = redditPosts.data.children.filter(function (item) {
-			return item.data.url.indexOf('streamable') > -1
-		});
-		
-		// make mongoose schema GifModels
-		var gifs = streamable.map(function (item) {
-			return new GifModel(item.data);
-		});
-		
-		saveToDb(gifs, function (err) {
-			if (err) console.log(err + ' saving failed');
-			console.log('Done!');
+		var streamable = [];
+		async.each(redditPosts.data.children, function (gif, callback) {
+			if (gif.data.url.indexOf('streamable') > -1) {
+				streamable.push(new GifModel(gif.data));
+				callback();
+			} else if (gif.data.url.indexOf('gfycat.com') > -1) {
+				var gfycatVideoName = gif.data.url.split('/').pop();
+				var options = {
+					host: 'gfycat.com',
+					path: '/cajax/get/' + gfycatVideoName
+				}
+				httpHelper.getData(options, function (data) {
+					gif.data.url = data.gfyItem.mp4Url;
+					streamable.push(new GifModel(gif.data));
+					callback();
+				});
+			} else {
+				callback();
+			}
+		}, function (err) {
+			saveToDb(streamable, function () {
+				if (err) console.log(err + ' saving failed');
+				console.log('Done!');
+			});
 		});
 	};
 	
@@ -48,7 +62,7 @@ var cronJob = function () {
 						if (err) {
 							console.log(err + ' error saving the data to database');
 						} else {
-							console.log(gif.title + 'saved to the db');
+							console.log(gif.title + ' saved to the db');
 						}
 						callback();
 					});
