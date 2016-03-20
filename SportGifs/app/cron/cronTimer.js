@@ -2,6 +2,7 @@
 var GifModel = require('../models/GifModel');
 var CronJob = require('cron').CronJob;
 var httpHelper = require('../services/httpHelper');
+var optionProvider = require('../providers/httpOptionsProvider');
 var async = require('async');
 
 var cronJob = function () {
@@ -11,16 +12,14 @@ var cronJob = function () {
 		//var subreddits = ['nba', 'soccer'];
 		var subreddits = ['nba', 'soccer','globaloffensive', 'rocketleague'];
 		for (var i = 0; i < subreddits.length; i++) {
-			var options = {
-				host: 'www.reddit.com',
-				path: '/r/' + subreddits[i] + '/.json?limit=100'
-			}
-			httpHelper.getData(options, initData);
+			var option = optionProvider.getHttpOptions('www.reddit.com', '/r/' + subreddits[i] + '/.json?limit=100');
+			httpHelper.getData(option, initData);
 		}
 	}, null, true, 'America/Los_Angeles');
 
 	function initData(redditPosts) {
 		console.log('initdata');
+		console.log(redditPosts);
 		// find streamable gifs from posts
 		var streamable = [];
 		async.each(redditPosts.data.children, function (gif, callback) {
@@ -29,10 +28,7 @@ var cronJob = function () {
 				callback();
 			} else if (gif.data.url.indexOf('gfycat.com') > -1) {
 				var gfycatVideoName = gif.data.url.split('/').pop();
-				var options = {
-					host: 'gfycat.com',
-					path: '/cajax/get/' + gfycatVideoName
-				}
+				var option = optionProvider.getHttpOptions('grycat.com', '/cajax/get/' + gfycatVideoName)
 				httpHelper.getData(options, function (data) {
 					gif.data.url = data.gfyItem.mp4Url;
 					streamable.push(new GifModel(gif.data));

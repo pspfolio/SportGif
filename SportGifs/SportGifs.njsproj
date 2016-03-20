@@ -32,6 +32,7 @@
   <ItemGroup>
     <Compile Include="app\cron\cronTimer.js" />
     <Compile Include="app\models\GifModel.js" />
+    <Compile Include="app\providers\httpOptionsProvider.js" />
     <Compile Include="app\routes\routes.js" />
     <Compile Include="app\services\httpHelper.js" />
     <Compile Include="server.js" />
@@ -42,6 +43,7 @@
     <Folder Include="app\" />
     <Folder Include="app\models\" />
     <Folder Include="app\cron\" />
+    <Folder Include="app\providers\" />
     <Folder Include="app\services\" />
     <Folder Include="app\routes\" />
   </ItemGroup>
