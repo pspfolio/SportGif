@@ -1,18 +1,27 @@
 ﻿var mongoose = require('mongoose');
 var GifModel = require('../models/GifModel');
 var CronJob = require('cron').CronJob;
+var GifsService = require('../services/gifsService');
 
 var routes = function (app) {
 	/*
 	 * GET ROUTES
 	 */
 
-	app.get('/api/gifs/:subCategory', function (req, res) {
+	app.get('/api/gifs/:subCategory', function (req, res) { 
 		var category = req.params.subCategory;
-		var query = GifModel.find({subreddit: category}).sort({created_at: -1});
-		query.exec(function (err, gifs) {
+		GifsService.getGifsByCategory(category, function (err, gifs) {
 			if (err) res.send(err);
-			
+			res.json(gifs);
+		});
+	});
+
+	app.get('/api/gifs/:subCategory/:limit', function (req, res) {
+		var category = req.params.subCategory;
+		var limit = req.params.limit;
+		console.log(limit);
+		var result = GifsService.getGifsByCategoryLimit(category, limit, function (err, gifs) {
+			if (err) res.send(err);
 			res.json(gifs);
 		});
 	});

@@ -34,6 +34,7 @@
     <Compile Include="app\models\GifModel.js" />
     <Compile Include="app\providers\httpOptionsProvider.js" />
     <Compile Include="app\routes\routes.js" />
+    <Compile Include="app\services\gifsService.js" />
     <Compile Include="app\services\httpHelper.js" />
     <Compile Include="server.js" />
     <Content Include="package.json" />

@@ -28,8 +28,8 @@ var cronJob = function () {
 				callback();
 			} else if (gif.data.url.indexOf('gfycat.com') > -1) {
 				var gfycatVideoName = gif.data.url.split('/').pop();
-				var option = optionProvider.getHttpOptions('grycat.com', '/cajax/get/' + gfycatVideoName)
-				httpHelper.getData(options, function (data) {
+				var option = optionProvider.getHttpOptions('gfycat.com', '/cajax/get/' + gfycatVideoName)
+				httpHelper.getData(option, function (data) {
 					gif.data.url = data.gfyItem.mp4Url;
 					streamable.push(new GifModel(gif.data));
 					callback();
