@@ -19,8 +19,17 @@ var routes = function (app) {
 	app.get('/api/gifs/:subCategory/:limit', function (req, res) {
 		var category = req.params.subCategory;
 		var limit = req.params.limit;
-		console.log(limit);
 		var result = GifsService.getGifsByCategoryLimit(category, limit, function (err, gifs) {
+			if (err) res.send(err);
+			res.json(gifs);
+		});
+	});
+	
+	app.get('/api/gifs/paged/:subCategory/:limit/:skip', function (req, res) {
+		var category = req.params.subCategory;
+		var limit = req.params.limit;
+		var skip = req.params.skip;
+		var result = GifsService.getGifsByCategoryPaged(category, limit, skip, function (err, gifs) {
 			if (err) res.send(err);
 			res.json(gifs);
 		});
@@ -32,10 +41,8 @@ var routes = function (app) {
 
 	app.post('/api/gifs', function (req, res) {
 		var gif = new GifModel(req.body);
-		console.log(gif);
 		gif.save(function (err) {
 			if (err) res.send(err);
-			
 			res.json(req.body);
 		});
 	});

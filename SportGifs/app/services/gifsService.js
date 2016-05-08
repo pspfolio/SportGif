@@ -12,6 +12,11 @@
 	GifsService.prototype.getGifsByCategoryLimit = function (category, limit, cb) {
 		var query = GifModel.find({ subreddit: category }).sort({ created_at: -1 }).limit(+limit);
 		execQuery(query, cb);
+	};
+	
+	GifsService.prototype.getGifsByCategoryPaged = function (category, limit, skip, cb) {
+		var query = GifModel.find({ subreddit: category }).sort({ created_at: -1 }).skip(+skip).limit(+limit);
+		execQuery(query, cb);
 	}
 	
 	function execQuery(query, cb) {
