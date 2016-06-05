@@ -17,12 +17,17 @@
 	GifsService.prototype.getGifsByCategoryPaged = function (category, limit, skip, cb) {
 		var query = GifModel.find({ subreddit: category }).sort({ created_at: -1 }).skip(+skip).limit(+limit);
 		execQuery(query, cb);
-	}
+	};
+	
+	GifsService.prototype.incViewCount = function (id, cb) {
+		var query = GifModel.findOne({ _id: id });
+		// increasing views count by one
+		GifModel.update(query, { $inc: { views: 1} }, cb);
+	};
 	
 	function execQuery(query, cb) {
 		query.exec(function (err, gifs) {
 			if (err) cb(err, null);
-			console.log('returning from service');
 			cb(null, gifs);
 		});
 	}

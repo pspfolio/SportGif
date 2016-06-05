@@ -10,7 +10,7 @@ var cronJob = function () {
 
 	new CronJob('59 * * * * *', function () {
 		//var subreddits = ['nba', 'soccer'];
-		var subreddits = ['nba', 'soccer','globaloffensive', 'rocketleague'];
+		var subreddits = ['nba'];
 		for (var i = 0; i < subreddits.length; i++) {
 			var option = optionProvider.getHttpOptions('www.reddit.com', '/r/' + subreddits[i] + '/.json?limit=100');
 			httpHelper.getData(option, initData);

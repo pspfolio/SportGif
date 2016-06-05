@@ -25,7 +25,7 @@ var routes = function (app) {
 		});
 	});
 	
-	app.get('/api/gifs/paged/:subCategory/:limit/:skip', function (req, res) {
+	app.get('/api/gifs/:subCategory/:limit/:skip', function (req, res) {
 		var category = req.params.subCategory;
 		var limit = req.params.limit;
 		var skip = req.params.skip;
@@ -34,7 +34,7 @@ var routes = function (app) {
 			res.json(gifs);
 		});
 	});
-	
+
 	/*
 	 * POST ROUTES
 	 */
@@ -47,7 +47,15 @@ var routes = function (app) {
 		});
 	});
 
-
+	/*
+	 * PUT ROUTES
+	*/
+	app.put('/api/views/:gifId', function (req, res) {
+		var gifId = req.params.gifId;
+		GifsService.incViewCount(gifId, function () {
+			res.send(200);
+		});
+	});
 };
 
 module.exports = routes;
