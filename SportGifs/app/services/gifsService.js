@@ -19,6 +19,16 @@
 		execQuery(query, cb);
 	};
 	
+	GifsService.prototype.getGifsByCategoryPagedPopular = function (category, limit, skip, cb) {
+		var query = GifModel.find({ subreddit: category }).sort({ views: -1 }).skip(+skip).limit(+limit);
+		execQuery(query, cb);
+	};
+	
+	GifsService.prototype.getGifsByCategoryPagedHandpicked = function (category, limit, skip, cb) {
+		var query = GifModel.find({ subreddit: category, handPicked: true }).sort({ views: 1 }).skip(+skip).limit(+limit);
+		execQuery(query, cb);
+	};
+	
 	GifsService.prototype.incViewCount = function (id, cb) {
 		var query = GifModel.findOne({ _id: id });
 		// increasing views count by one

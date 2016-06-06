@@ -7,7 +7,8 @@ var GifSchema = Schema({
 	permalink: { type: String, required: true },
 	subreddit: { type: String, required: true },
 	created_at: { type: Date, default: Date.now },
-	views: { type: Number, default: 0 }
+	views: { type: Number, default: 0 },
+	handPicked: { type: Boolean, default: false}
 }); 
 
 // set created_at before saving it to db
