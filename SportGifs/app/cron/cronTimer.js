@@ -18,9 +18,8 @@ var cronJob = function () {
 	}, null, true, 'America/Los_Angeles');
 
 	function initData(redditPosts) {
-		console.log('initdata');
-		console.log(redditPosts);
 		// find streamable gifs from posts
+		console.log(redditPosts);
 		var streamable = [];
 		async.each(redditPosts.data.children, function (gif, callback) {
 			if (gif.data.url.indexOf('streamable') > -1) {
@@ -29,9 +28,14 @@ var cronJob = function () {
 			} else if (gif.data.url.indexOf('gfycat.com') > -1) {
 				var gfycatVideoName = gif.data.url.split('/').pop();
 				var option = optionProvider.getHttpOptions('gfycat.com', '/cajax/get/' + gfycatVideoName)
+				console.log(option);
 				httpHelper.getData(option, function (data) {
-					gif.data.url = data.gfyItem.mp4Url;
-					streamable.push(new GifModel(gif.data));
+					console.log(data);
+					if (!data.error) {
+						gif.data.url = data.gfyItem.mp4Url;
+						streamable.push(new GifModel(gif.data));
+						callback();
+					}
 					callback();
 				});
 			} else {
