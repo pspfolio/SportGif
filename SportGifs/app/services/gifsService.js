@@ -14,18 +14,33 @@
 		execQuery(query, cb);
 	};
 	
-	GifsService.prototype.getGifsByCategoryPaged = function (category, limit, skip, cb) {
-		var query = GifModel.find({ subreddit: category }).sort({ created_at: -1 }).skip(+skip).limit(+limit);
+	GifsService.prototype.getGifsByCategoryPaged = function (category, limit, skip, searchText, cb) {
+		if (searchText) {
+			console.log(searchText);
+			var query = GifModel.find({ subreddit: category,  $text: { $search: searchText } }).sort({ created_at: -1 }).skip(+skip).limit(+limit);
+		} else { 
+			var query = GifModel.find({ subreddit: category }).sort({ created_at: -1 }).skip(+skip).limit(+limit);
+		}
+		
 		execQuery(query, cb);
 	};
 	
-	GifsService.prototype.getGifsByCategoryPagedPopular = function (category, limit, skip, cb) {
-		var query = GifModel.find({ subreddit: category }).sort({ views: -1 }).skip(+skip).limit(+limit);
+	GifsService.prototype.getGifsByCategoryPagedPopular = function (category, limit, skip, searchText, cb) {
+		if (searchText) {
+			var query = GifModel.find({ subreddit: category, $text: { $search: searchText } }).sort({ views: -1 }).skip(+skip).limit(+limit);
+		} else {
+			var query = GifModel.find({ subreddit: category }).sort({ views: -1 }).skip(+skip).limit(+limit);
+		}
 		execQuery(query, cb);
 	};
 	
-	GifsService.prototype.getGifsByCategoryPagedHandpicked = function (category, limit, skip, cb) {
+	GifsService.prototype.getGifsByCategoryPagedHandpicked = function (category, limit, skip, searchText, cb) {
+		if (searchText) {
+			var query = GifModel.find({ subreddit: category, $text: { $search: searchText }, handPicked: true,  }).sort({ views: 1 }).skip(+skip).limit(+limit);
+		} else {
 		var query = GifModel.find({ subreddit: category, handPicked: true }).sort({ views: 1 }).skip(+skip).limit(+limit);
+		}
+		
 		execQuery(query, cb);
 	};
 	

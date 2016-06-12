@@ -17,6 +17,10 @@ GifSchema.pre('save', function (next) {
 	next();
 });
 
-GifSchema.index({ title : 1 });
+GifSchema.index({
+	title : 'text',
+	created_at: 1,
+	views: 1
+});
 
 module.exports = mongoose.model('gif', GifSchema);

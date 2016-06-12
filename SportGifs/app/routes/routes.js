@@ -34,28 +34,58 @@ var routes = function (app) {
 		});
 	});
 	
-	app.get('/api/gifs/:subCategory/:limit/:skip/:filter', function (req, res) {
+	app.get('/api/gifs/:subCategory/:limit/:skip/:filter/', function (req, res) {
 		var category = req.params.subCategory;
 		var limit = req.params.limit;
 		var skip = req.params.skip;
 		var filter = req.params.filter;
+		var searchText = req.params.searchText;
 		
 		//'Newest', 'Popular', 'Picks'
 		switch (filter.toLowerCase()) {
 			case 'picks':
-				var result = GifsService.getGifsByCategoryPagedHandpicked(category, limit, skip, function (err, gifs) {
+				var result = GifsService.getGifsByCategoryPagedHandpicked(category, limit, skip, searchText, function (err, gifs) {
 					if (err) res.send(err);
 					res.json(gifs);
 				});
 				break;
 			case 'popular':
-				var result = GifsService.getGifsByCategoryPagedPopular(category, limit, skip, function (err, gifs) {
+				var result = GifsService.getGifsByCategoryPagedPopular(category, limit, skip, searchText, function (err, gifs) {
 					if (err) res.send(err);
 					res.json(gifs);
 				});
 				break;
 			default:
-				var result = GifsService.getGifsByCategoryPaged(category, limit, skip, function (err, gifs) {
+				var result = GifsService.getGifsByCategoryPaged(category, limit, skip, searchText, function (err, gifs) {
+					if (err) res.send(err);
+					res.json(gifs);
+				});
+		}
+	});
+	
+	app.get('/api/gifs/:subCategory/:limit/:skip/:filter/:searchText', function (req, res) {
+		var category = req.params.subCategory;
+		var limit = req.params.limit;
+		var skip = req.params.skip;
+		var filter = req.params.filter;
+		var searchText = req.params.searchText;
+
+		//'Newest', 'Popular', 'Picks'
+		switch (filter.toLowerCase()) {
+			case 'picks':
+				var result = GifsService.getGifsByCategoryPagedHandpicked(category, limit, skip, searchText, function (err, gifs) {
+					if (err) res.send(err);
+					res.json(gifs);
+				});
+				break;
+			case 'popular':
+				var result = GifsService.getGifsByCategoryPagedPopular(category, limit, skip, searchText, function (err, gifs) {
+					if (err) res.send(err);
+					res.json(gifs);
+				});
+				break;
+			default:
+				var result = GifsService.getGifsByCategoryPaged(category, limit, skip, searchText, function (err, gifs) {
 					if (err) res.send(err);
 					res.json(gifs);
 				});
