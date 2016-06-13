@@ -8,7 +8,7 @@ var async = require('async');
 var cronJob = function () {
 	
 
-	new CronJob('59 * * * * *', function () {
+	new CronJob('0 0 */2 * * *', function () {
 		//var subreddits = ['nba', 'soccer'];
 		var subreddits = ['nba'];
 		for (var i = 0; i < subreddits.length; i++) {
