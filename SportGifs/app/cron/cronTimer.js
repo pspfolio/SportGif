@@ -8,7 +8,7 @@ var async = require('async');
 var cronJob = function () {
 	
 
-	new CronJob('* * * * * *', function () {
+	new CronJob('0 0 */2 * * *', function () {
 		//var subreddits = ['nba', 'soccer'];
 		var subreddits = ['nba'];
 		for (var i = 0; i < subreddits.length; i++) {
@@ -34,11 +34,8 @@ var cronJob = function () {
 					if (!data.error) {
 						gif.data.url = data.gfyItem.mp4Url;
 						streamable.push(new GifModel(gif.data));
-						callback();
-					} else {
-						callback();
-					}
-					
+					} 
+					callback();
 				});
 			} else {
 				callback();
