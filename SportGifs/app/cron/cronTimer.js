@@ -8,7 +8,7 @@ var async = require('async');
 var cronJob = function () {
 	
 
-	new CronJob('1 * * * * *', function () {
+	new CronJob('0 0 */2  * * *', function () {
 		//var subreddits = ['nba', 'soccer'];
 		var subreddits = ['nba'];
 		for (var i = 0; i < subreddits.length; i++) {
@@ -19,7 +19,6 @@ var cronJob = function () {
 
 	function initData(redditPosts) {
 		// find streamable gifs from posts
-		console.log(redditPosts);
 		var streamable = [];
 		async.each(redditPosts.data.children, function (gif, callback) {
 			if (gif.data.url.indexOf('streamable') > -1) {
@@ -28,9 +27,7 @@ var cronJob = function () {
 			} else if (gif.data.url.indexOf('gfycat.com') > -1) {
 				var gfycatVideoName = gif.data.url.split('/').pop();
 				var option = optionProvider.getHttpOptions('gfycat.com', '/cajax/get/' + gfycatVideoName)
-				console.log(option);
 				httpHelper.getData(option, function (data) {
-					console.log(data);
 					if (!data.error) {
 						gif.data.url = data.gfyItem.mp4Url;
 						streamable.push(new GifModel(gif.data));
